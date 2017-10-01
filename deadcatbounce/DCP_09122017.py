@@ -60,7 +60,7 @@ dailystdindex = data_train['RUA'].std()
 dailymeanindex = data_train['RUA'].mean()
 
 return_summary = {}
-window_list = range(3,8)
+window_list = range(3,11)
 result = pd.DataFrame()
     
 def deadcat(dataset, window=7, indexname='RUA', sharpfall=-0.1, num_std=1):
@@ -100,9 +100,8 @@ def deadcat(dataset, window=7, indexname='RUA', sharpfall=-0.1, num_std=1):
 
 pickle.dump(return_summary, open(path_ticker+"result.p", "wb" ))
 
-window=10
-test = deadcat(dataset=data_train, window=window, indexname='RUA', sharpfall=-0.1, num_std=1)
-return_summary[str(window)] = test.mean()
-result[str(window)] = return_summary[str(window)].describe() 
-return_summary[str(window)].hist(bins=50)
-result.to_csv(path_ticker+"result.csv")
+for window in window_list:
+    test = deadcat(dataset=data_train, window=window, indexname='RUA', sharpfall=-0.1, num_std=1)
+    return_summary[str(window)] = test.mean()
+    result[str(window)] = return_summary[str(window)].describe() 
+result.to_csv(path_ticker+"deadcat.csv")
